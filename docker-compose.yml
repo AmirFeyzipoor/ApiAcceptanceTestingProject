@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  sqlDb:
+        container_name: SqlServerContainer
+        #image: mcr.microsoft.com/mssql/server:2019-latest
+        image: sql_server_docker-sqlserver1:latest
+        ports:
+            - 42069:1433
+        environment:
+            SA_PASSWORD: "password123!"
+            ACCEPT_EULA: "Y"
+            MSSQL_DATA_DIR: /var/opt/sqlserver/data
+            MSSQL_LOG_DIR: /var/opt/sqlserver/log
+            MSSQL_BACKUP_DIR: /var/opt/sqlserver/backup
+        volumes: 
+          - sqlsystem:/var/opt/mssql/
+          - sqldata:/var/opt/sqlserver/data
+          - sqllog:/var/opt/sqlserver/log
+          - sqlbackup:/var/opt/sqlserver/backup
+  webApiProject:
+        container_name: WebApiContainer
+        image: ${DOCKER_REGISTRY-}apitestedproject
+        ports:
+            - 6968:80
+        build:
+            context: D:/feyzipoor/ApiTestedProject/
+            dockerfile: D:/feyzipoor/ApiTestedProject/Dockerfile
+        depends_on:
+            - sqlDb
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:

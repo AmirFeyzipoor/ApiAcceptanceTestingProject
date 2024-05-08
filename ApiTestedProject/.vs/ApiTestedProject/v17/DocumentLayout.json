@@ -1,0 +1,90 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E0D004CF-C04B-4A64-A19B-348D36810AD9}|..\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj|d:\\feyzipoor\\specflow\\apiacceptancetestsproject\\apitestedproject.api.acceptancetests\\hooks\\dockercontrollerhooks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\obj\\Debug\\net6.0\\xUnit.AssemblyHooks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0D004CF-C04B-4A64-A19B-348D36810AD9}|..\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj|d:\\feyzipoor\\specflow\\apiacceptancetestsproject\\apitestedproject.api.acceptancetests\\apitestedproject.api.acceptancetests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E0D004CF-C04B-4A64-A19B-348D36810AD9}|..\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj|d:\\feyzipoor\\specflow\\apiacceptancetestsproject\\apitestedproject.api.acceptancetests\\stepdefinitions\\deleteproductsuccessfullysteps.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "xUnit.AssemblyHooks.cs",
+              "DocumentMoniker": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\obj\\Debug\\net6.0\\xUnit.AssemblyHooks.cs",
+              "RelativeDocumentMoniker": "..\\ApiTestedProject.Api.AcceptanceTests\\obj\\Debug\\net6.0\\xUnit.AssemblyHooks.cs",
+              "ToolTip": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\obj\\Debug\\net6.0\\xUnit.AssemblyHooks.cs",
+              "RelativeToolTip": "..\\ApiTestedProject.Api.AcceptanceTests\\obj\\Debug\\net6.0\\xUnit.AssemblyHooks.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-07T06:44:21.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DeleteProductSuccessfullySteps.cs",
+              "DocumentMoniker": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\StepDefinitions\\DeleteProductSuccessfullySteps.cs",
+              "RelativeDocumentMoniker": "..\\ApiTestedProject.Api.AcceptanceTests\\StepDefinitions\\DeleteProductSuccessfullySteps.cs",
+              "ToolTip": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\StepDefinitions\\DeleteProductSuccessfullySteps.cs",
+              "RelativeToolTip": "..\\ApiTestedProject.Api.AcceptanceTests\\StepDefinitions\\DeleteProductSuccessfullySteps.cs",
+              "ViewState": "AQIAABsAAAAAAAAAAAAWwDEAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-06T13:10:24.685Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApiTestedProject.Api.AcceptanceTests.csproj",
+              "DocumentMoniker": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj",
+              "RelativeDocumentMoniker": "..\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj",
+              "ToolTip": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj",
+              "RelativeToolTip": "..\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-05-05T10:53:22.438Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DockerControllerHooks.cs",
+              "DocumentMoniker": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\Hooks\\DockerControllerHooks.cs",
+              "RelativeDocumentMoniker": "..\\ApiTestedProject.Api.AcceptanceTests\\Hooks\\DockerControllerHooks.cs",
+              "ToolTip": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\Hooks\\DockerControllerHooks.cs",
+              "RelativeToolTip": "..\\ApiTestedProject.Api.AcceptanceTests\\Hooks\\DockerControllerHooks.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABAAAAA8AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-05T10:53:12.323Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

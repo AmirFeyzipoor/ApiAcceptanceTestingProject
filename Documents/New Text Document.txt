@@ -1,0 +1,380 @@
+using ApiTestedProject.Api.AcceptanceTests.Models.Clients;
+using ApiTestedProject.Api.AcceptanceTests.Models.MigrationSettings.Context;
+using BoDi;
+using Ductus.FluentDocker.Services;
+using Ductus.FluentDocker.Builders;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Refit;
+
+namespace ApiTestedProject.Api.AcceptanceTests.Hooks
+{
+    [Binding]
+    public class DockerControllerHooks
+    {
+        private IObjectContainer _objectContainer;
+        //private static ICompositeService? _compositeService;
+
+        public DockerControllerHooks(IObjectContainer objectContainer
+            //ICompositeService compositeService
+            )
+        {
+            _objectContainer = objectContainer;
+            //_compositeService = compositeService;
+        }
+
+        [AfterTestRun]
+        public static async Task DeropSnapshotAndMigrationDownDatabase()
+        {
+            var masterConnectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=master;TrustServerCertificate=True;Command Timeout=10000";
+            var onlineShopConnectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+            var snapshotName = "TestSnapshot";
+
+            using (var connection = new SqlConnection(masterConnectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var checkSnapshotCommand = connection.CreateCommand())
+                {
+                    checkSnapshotCommand.CommandText = $"SELECT COUNT(*) FROM sys.databases WHERE name = '{snapshotName}'";
+                    var count = (int?)await checkSnapshotCommand.ExecuteScalarAsync();
+                    if (count.HasValue && count.Value > 0)
+                    {
+                        using (var deleteSnapshotCommand = connection.CreateCommand())
+                        {
+                            deleteSnapshotCommand.CommandText = $"DROP DATABASE {snapshotName}";
+                            await deleteSnapshotCommand.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+            }
+
+            var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+                .UseSqlServer(onlineShopConnectionString);
+            var db = new OnlineShopDbContext(optionBuilder.Options);
+            await db.Database.EnsureDeletedAsync();
+
+        }
+
+        [BeforeTestRun]
+        public static async Task CreateSnapshotAndMigrationUpDatabase()
+        {
+            //var config = LoadConfiguration();
+            //var dockerComposeFileName = config["DockerComposeFileName"];
+            //var dockerComposePath = GetDockerComposeLocation(dockerComposeFileName!);
+            //var confirmationUrl = config["ApiTestedProject:BaseAddress"];
+            //_compositeService = new Builder()
+            //    .UseContainer()
+            //    .UseCompose()
+            //    .FromFile(dockerComposePath)
+            //    .RemoveOrphans()
+            //    .Build().Start();
+
+            var masterConnectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=master;TrustServerCertificate=True;Command Timeout=10000";
+            var onlineShopConnectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+            var snapshotName = "TestSnapshot";
+
+            //using (var connection = new SqlConnection(masterConnectionString))
+            //{
+            //    await connection.OpenAsync();
+
+            //    using (var checkSnapshotCommand = connection.CreateCommand())
+            //    {
+            //        checkSnapshotCommand.CommandText = $"SELECT COUNT(*) FROM sys.databases WHERE name = '{snapshotName}'";
+            //        var count = (int?)await checkSnapshotCommand.ExecuteScalarAsync();
+            //        if (count.HasValue && count.Value > 0)
+            //        {
+            //            using (var deleteSnapshotCommand = connection.CreateCommand())
+            //            {
+            //                deleteSnapshotCommand.CommandText = $"DROP DATABASE {snapshotName}";
+            //                await deleteSnapshotCommand.ExecuteNonQueryAsync();
+            //            }
+            //        }
+            //    }
+
+            //    var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+            //        .UseSqlServer(onlineShopConnectionString);
+            //    var db = new OnlineShopDbContext(optionBuilder.Options);
+            //    await db.Database.EnsureDeletedAsync();
+            var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+                   .UseSqlServer(onlineShopConnectionString);
+            var db = new OnlineShopDbContext(optionBuilder.Options);
+            await db.Database.MigrateAsync();
+
+            using (var connection = new SqlConnection(masterConnectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var createSnapshotCommand = connection.CreateCommand())
+                {
+                    createSnapshotCommand.CommandText = $"CREATE DATABASE {snapshotName} ON (NAME = OnlineShop, FILENAME = '/var/opt/sqlserver/data/{snapshotName}') AS SNAPSHOT OF OnlineShop";
+                    await createSnapshotCommand.ExecuteNonQueryAsync();
+                }
+            }
+
+        }
+
+        //var connectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+        //var snapshotName = "TestSnapshot";
+
+        //var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+        //    .UseSqlServer(connectionString);
+        //var db = new OnlineShopDbContext(optionBuilder.Options);
+        //await db.Database.MigrateAsync();
+
+        //using (var connection = new SqlConnection(connectionString))
+        //{
+        //    connection.Open();
+
+        //    using (var checkSnapshotCommand = connection.CreateCommand())
+        //    {
+        //        checkSnapshotCommand.CommandText = $"SELECT COUNT(*) FROM sys.databases WHERE name = '{snapshotName}' AND state_desc = 'SNAPSHOT'";
+        //        var count = (int?)checkSnapshotCommand.ExecuteScalar();
+        //        if (count.HasValue && count.Value > 0)
+        //        {
+        //            using (var deleteSnapshotCommand = connection.CreateCommand())
+        //            {
+        //                deleteSnapshotCommand.CommandText = $"DROP SNAPSHOT {snapshotName}";
+        //                deleteSnapshotCommand.ExecuteNonQuery();
+        //            }
+        //        }
+        //    }
+
+        //    db.Database.EnsureDeleted();
+        //    await db.Database.MigrateAsync();
+
+        //    var createSnapshotCommand = connection.CreateCommand();
+        //    createSnapshotCommand.CommandText = $"CREATE DATABASE {snapshotName} ON (NAME = OnlineShop, FILENAME = '/var/opt/sqlserver/data/{snapshotName}') AS SNAPSHOT OF OnlineShop";
+        //    createSnapshotCommand.Parameters.AddWithValue("@snapshotName", snapshotName);
+        //    createSnapshotCommand.ExecuteNonQuery();
+        //}
+
+
+
+
+
+        //var connectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+
+        //var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+        //    .UseSqlServer(connectionString);
+        //var db = new OnlineShopDbContext(optionBuilder.Options);
+        //db.Database.EnsureDeleted();
+        //await db.Database.MigrateAsync();
+
+        ////var filePath = "/var/opt/sqlserver/data/OnlineShop_snapshot.mdf";
+        ////using var process = new Process
+        ////{
+        ////    StartInfo = new ProcessStartInfo
+        ////    {
+        ////        FileName = "docker",
+        ////        Arguments = $"exec -it SqlServerContainer -w /var/opt/sqlserver/data rm {filePath}",
+        ////        RedirectStandardOutput = true,
+        ////        UseShellExecute = false,
+        ////        CreateNoWindow = true
+        ////    }
+        ////};
+        ////process.Start();
+        ////process.WaitForExit();
+
+        ////var snapshotName = "TestSnapshot";
+        ////using (var connection = new SqlConnection(connectionString))
+        ////{
+        ////    connection.Open();
+
+        ////    using (var checkSnapshotCommand = connection.CreateCommand())
+        ////    {
+        ////        checkSnapshotCommand.CommandText = $"SELECT COUNT(*) FROM sys.databases WHERE name = '{snapshotName}' AND state_desc = 'SNAPSHOT'";
+        ////        var count = (int?)checkSnapshotCommand.ExecuteScalar();
+        ////        if (count.HasValue && count.Value > 0)
+        ////        {
+        ////            using (var deleteSnapshotCommand = connection.CreateCommand())
+        ////            {
+        ////                deleteSnapshotCommand.CommandText = $"DROP SNAPSHOT {snapshotName}";
+        ////                deleteSnapshotCommand.ExecuteNonQuery();
+        ////            }
+        ////        }
+        ////        else
+        ////        {
+        ////            using (var createSnapshotCommand = connection.CreateCommand())
+        ////            {
+        ////                createSnapshotCommand.CommandText = $"CREATE DATABASE {snapshotName} ON (NAME = OnlineShop, FILENAME = '/var/opt/sqlserver/data/{snapshotName}') AS SNAPSHOT OF OnlineShop";
+        ////                createSnapshotCommand.ExecuteNonQuery();
+        ////            }
+        ////        }
+        ////    }
+        ////}
+        //var snapshotName = "TestSnapshot";
+        //using (var connection = new SqlConnection(connectionString))
+        //{
+        //    connection.Open();
+
+        //    var checkSnapshotCommand = connection.CreateCommand();
+        //    checkSnapshotCommand.CommandText = $"SELECT COUNT(*) FROM sys.databases WHERE name = @snapshotName";
+        //    checkSnapshotCommand.Parameters.AddWithValue("@snapshotName", snapshotName);
+        //    int count = (int)checkSnapshotCommand.ExecuteScalar();
+        //    //int count = result != null ? (int)result : 0;
+        //    if (count > 0)
+        //    {
+        //        //var filePath = "/var/opt/sqlserver/data/OnlineShop_snapshot.mdf";
+        //        //using var process = new Process
+        //        //{
+        //        //    StartInfo = new ProcessStartInfo
+        //        //    {
+        //        //        FileName = "docker",
+        //        //        Arguments = $"exec -it SqlServerContainer -w /var/opt/sqlserver/data rm {filePath}",
+        //        //        RedirectStandardOutput = true,
+        //        //        UseShellExecute = false,
+        //        //        CreateNoWindow = true
+        //        //    }
+        //        //};
+        //        //process.Start();
+        //        //process.WaitForExit();
+        //        var deleteSnapshotCommand = connection.CreateCommand();
+        //        deleteSnapshotCommand.CommandText = $"DROP DATABASE {snapshotName}";
+        //        deleteSnapshotCommand.ExecuteNonQuery();
+        //    }
+        //    else
+        //    {
+        //        var createSnapshotCommand = connection.CreateCommand();
+        //        createSnapshotCommand.CommandText = $"CREATE DATABASE {snapshotName} ON (NAME = OnlineShop, FILENAME = '/var/opt/sqlserver/data/{snapshotName}') AS SNAPSHOT OF OnlineShop";
+        //        createSnapshotCommand.Parameters.AddWithValue("@snapshotName", snapshotName);
+        //        createSnapshotCommand.ExecuteNonQuery();
+
+        //    }
+        //}
+
+        [AfterScenario]
+        public static async Task RestoreDatabase()
+        {
+            //var connectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+            var masterConnectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=master;TrustServerCertificate=True;Command Timeout=10000";
+            using (var connection = new SqlConnection(masterConnectionString))
+            {
+                await connection.OpenAsync();
+
+                // Get the current process ID
+                var currentProcessIdCommand = connection.CreateCommand();
+                currentProcessIdCommand.CommandText = "SELECT @@SPID";
+                short currentProcessIdShort = (short)currentProcessIdCommand.ExecuteScalar();
+                int currentProcessId = Convert.ToInt32(currentProcessIdShort);
+
+                // 1. Kill all active connections to the OnlineShop database, excluding the current connection
+                var killConnectionsCommand = connection.CreateCommand();
+                killConnectionsCommand.CommandText = $"DECLARE @kill varchar(8000) = ''; SELECT @kill = @kill + 'KILL ' + CONVERT(varchar(5), spid) + ';' FROM master..sysprocesses WHERE dbid = DB_ID('OnlineShop') AND spid <> {currentProcessId}; EXEC(@kill);";
+                await killConnectionsCommand.ExecuteNonQueryAsync();
+
+                // 2. Set the database to single-user mode
+                //var singleUserModeCommand = connection.CreateCommand();
+                //singleUserModeCommand.CommandText = "ALTER DATABASE OnlineShop SET SINGLE_USER WITH ROLLBACK IMMEDIATE";
+                //singleUserModeCommand.ExecuteNonQuery();
+
+                // 3. Switch to the master database
+                //var switchToMasterCommand = connection.CreateCommand();
+                //switchToMasterCommand.CommandText = "USE master";
+                //switchToMasterCommand.ExecuteNonQuery();
+
+                // 4. Restore the database from the snapshot
+                var restoreCommand = connection.CreateCommand();
+                restoreCommand.CommandText = "RESTORE DATABASE OnlineShop FROM DATABASE_SNAPSHOT = 'TestSnapshot'";
+                await restoreCommand.ExecuteNonQueryAsync();
+
+                // 5. Set the database back to multi-user mode
+                //var multiUserModeCommand = connection.CreateCommand();
+                //multiUserModeCommand.CommandText = "ALTER DATABASE OnlineShop SET MULTI_USER";
+                //multiUserModeCommand.ExecuteNonQuery();
+            }
+        }
+
+        //[BeforeTestRun]
+        //public static void DockerComposeUp()
+        //{
+        //    var config = LoadConfiguration();
+
+        //    var dockerComposeFileName = config["DockerComposeFileName"];
+        //    var dockerComposePath = GetDockerComposeLocation(dockerComposeFileName!);
+
+        //    var confirmationUrl = config["ApiTestedProject:BaseAddress"];
+        //    _compositeService = new Builder()
+        //        .UseContainer()
+        //        .UseCompose()
+        //        .FromFile(dockerComposePath)
+        //        .RemoveOrphans()
+        //        //.WaitForHttp("webApi", $"{confirmationUrl}/products",
+        //        //    continuation: (response, _)
+        //        //    => response.Code != System.Net.HttpStatusCode.OK ? 2000 : 0)
+        //        .Build().Start();
+        //}
+
+        //[AfterTestRun]
+        //public static void DockerComposeDown()
+        //{
+        //    _compositeService!.Stop();
+        //    _compositeService.Dispose();
+        //}
+
+        //[BeforeScenario]
+        //public static async Task MigrationUpDatabase()
+        //{
+        //    var connectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+
+        //    var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+        //        .UseSqlServer(connectionString);
+        //    var db = new OnlineShopDbContext(optionBuilder.Options);
+        //    await db.Database.MigrateAsync();
+        //}
+
+        //[AfterScenario]
+        //public static void MigrationDownDatabase()
+        //{
+        //    var connectionString = "server=192.168.3.32,42069;password=password123!;Persist Security Info=True;User ID=sa;Initial Catalog=OnlineShop;TrustServerCertificate=True;Command Timeout=10000";
+
+        //    var optionBuilder = new DbContextOptionsBuilder<OnlineShopDbContext>()
+        //        .UseSqlServer(connectionString);
+        //    var db = new OnlineShopDbContext(optionBuilder.Options);
+        //    db.Database.EnsureDeleted();
+        //}
+
+        //[BeforeScenario]
+        //public void AddHttpClient()
+        //{
+        //    var config = LoadConfiguration();
+        //    var httpClient = new HttpClient
+        //    {
+        //        BaseAddress = new Uri(config["ApiTestedProject:BaseAddress"]!)
+        //    };
+        //    _objectContainer.RegisterInstanceAs(httpClient);
+        //}
+
+        [BeforeScenario]
+        public void AddRefitClient()
+        {
+            var config = LoadConfiguration();
+
+            var productClient = RestService.For<IProductClient>
+                (config["ApiTestedProject:BaseAddress"]!);
+
+            _objectContainer.RegisterInstanceAs<IProductClient>(productClient);
+        }
+
+        private static string GetDockerComposeLocation(string dockerComposeFileName)
+        {
+            var directory = Directory.GetCurrentDirectory();
+            while (!Directory.EnumerateFiles(directory, "*.yml")
+                .Any(_ => _.EndsWith(dockerComposeFileName)))
+            {
+                directory = directory.Substring(0,
+                    directory.LastIndexOf(Path.DirectorySeparatorChar));
+            }
+            return Path.Combine(directory, dockerComposeFileName);
+        }
+
+        private static IConfiguration LoadConfiguration()
+        {
+            return new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+        }
+    }
+}

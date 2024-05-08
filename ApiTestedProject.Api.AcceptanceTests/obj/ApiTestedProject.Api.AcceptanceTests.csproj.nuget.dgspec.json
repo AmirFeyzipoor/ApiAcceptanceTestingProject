@@ -1,0 +1,129 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj": {}
+  },
+  "projects": {
+    "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj",
+        "projectName": "ApiTestedProject.Api.AcceptanceTests",
+        "projectPath": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\ApiTestedProject.Api.AcceptanceTests.csproj",
+        "packagesPath": "C:\\Users\\amir\\.nuget\\packages\\",
+        "outputPath": "D:\\feyzipoor\\SpecFlow\\ApiAcceptanceTestsProject\\ApiTestedProject.Api.AcceptanceTests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\amir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Docker.DotNet": {
+              "target": "Package",
+              "version": "[3.125.15, )"
+            },
+            "Ductus.FluentDocker": {
+              "target": "Package",
+              "version": "[2.8.3, )"
+            },
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[6.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.18, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.18, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.0.0, )"
+            },
+            "Refit": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "SpecFlow": {
+              "target": "Package",
+              "version": "[3.9.40, )"
+            },
+            "SpecFlow.Internal.Json": {
+              "target": "Package",
+              "version": "[1.0.8, )"
+            },
+            "SpecFlow.Plus.LivingDocPlugin": {
+              "target": "Package",
+              "version": "[3.9.57, )"
+            },
+            "SpecFlow.xUnit": {
+              "target": "Package",
+              "version": "[3.9.40, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
